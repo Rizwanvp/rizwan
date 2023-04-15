@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Course</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="css/style.css">
+    </head>
+    <body>
+        <h3 class="heading">Stocket</h3>
+        <div class="container">
+            <div class="main-video">
+                <div class="video">
+                    <video src="videos/EP 10 Parel channel Breakout trading _ entry  exit  stoploss.mp4"controls></video>
+                    <h3 class="title">01. Indroduction</h3>
+                </div>
+            </div>
+            <div class="video-list">
+                <div class="vid active">
+                    <video src="videos/EP 1 The Complete Crypto Trading Course For Beginners.mp4"></video>
+                    <h3 class="title">01. Explaining our plan</h3>
+                    <button class="completed-btn">Completed</button>
+                </div>
+                <div class="vid locked">
+                    <video src="videos/Ep 12 paper trading platform trading view basic.mp4"></video>
+                    <h3 class="title">02.  Stocket</h3>
+                    <button class="completed-btn">Completed</button>
+                </div>
+                <div class="vid locked">
+                    <video src="videos/EP 13 double bottom breakout_ entry exit target.mp4"></video>
+                    <h3 class="title">03. Trading</h3>
+                    <button class="completed-btn">Completed</button>
+                </div>
+                <div class="vid locked">
+                    <video src=""></video>
+                    <h3 class="title">04.  blah</h3>
+                    <button class="completed-btn">Completed</button>
+                </div>
+            </div>
+        </div>
+        <script>
+            let listVideo = document.querySelectorAll('.video-list .vid');
+            let mainVideo = document.querySelector('.main-video video');
+            let title = document.querySelector('.main-video .title');
+
+            function updateVideoList() {
+                listVideo.forEach((video, index) => {
+                    let completed = localStorage.getItem(`video-${index}`);
+                    if (completed) {
+                        video.classList.add('completed');
+                        if (index < listVideo.length - 1) {
+                            listVideo[index + 1].classList.remove('locked');
+                        }
+                    } else {
+                        video.classList.remove('completed');
+                        if (index > 0) {
+                            let prevCompleted = localStorage.getItem(`video-${index - 1}`);
+                            if (!prevCompleted) {
+                                video.classList.add('locked');
+                            }
+                        }
+                    }
+
+                    video.onclick = () => {
+                        if (!video.classList.contains('locked')) {
+                            listVideo.forEach(vid => vid.classList.remove('active'));
+                            video.classList.add('active');
+                            if (video.classList.contains('active')) {
+                                let src = video.children[0].getAttribute('src');
+                                mainVideo.src = src;
+                                let text = video.children[1].innerHTML;
+                                title.innerHTML = text;
+                            };
+                        };
+                    };
+
+                    let completedBtn = video.querySelector('.completed-btn');
+                    if (completedBtn) {
+                        completedBtn.onclick = () => {
+                            localStorage.setItem(`video-${index}`, 'true');
+                            if (index < listVideo.length - 1) {
+                                listVideo[index + 1].classList.remove('locked');
+                            };
+                            updateVideoList();
+                        };
+                    };
+                });
+            }
+
+            updateVideoList();
+        </script>
+    </body>
+</html>
